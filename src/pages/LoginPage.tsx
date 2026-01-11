@@ -7,6 +7,12 @@ import { Label } from "@/components/ui/label";
 import { Heart, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 
+// Dummy credentials
+const DUMMY_USERS = {
+  admin: { email: "admin@weddingku.id", password: "admin123", role: "admin" },
+  user: { email: "user@weddingku.id", password: "user123", role: "user" },
+};
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -17,9 +23,17 @@ const LoginPage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Dummy login - just navigate to dashboard
-    toast.success("Login berhasil!");
-    navigate("/dashboard");
+    
+    // Check dummy credentials
+    if (formData.email === DUMMY_USERS.admin.email && formData.password === DUMMY_USERS.admin.password) {
+      toast.success("Login berhasil sebagai Admin!");
+      navigate("/dashboard?role=admin");
+    } else if (formData.email === DUMMY_USERS.user.email && formData.password === DUMMY_USERS.user.password) {
+      toast.success("Login berhasil!");
+      navigate("/dashboard");
+    } else {
+      toast.error("Email atau password salah!");
+    }
   };
 
   return (
@@ -109,6 +123,21 @@ const LoginPage = () => {
               Daftar sekarang
             </Link>
           </p>
+
+          {/* Demo Credentials */}
+          <div className="mt-6 p-4 bg-secondary/50 rounded-lg">
+            <p className="text-xs text-muted-foreground text-center mb-3 font-medium">Demo Credentials:</p>
+            <div className="space-y-2 text-xs">
+              <div className="flex justify-between items-center p-2 bg-background/50 rounded">
+                <span className="text-muted-foreground">Admin:</span>
+                <code className="text-primary">admin@weddingku.id / admin123</code>
+              </div>
+              <div className="flex justify-between items-center p-2 bg-background/50 rounded">
+                <span className="text-muted-foreground">User:</span>
+                <code className="text-primary">user@weddingku.id / user123</code>
+              </div>
+            </div>
+          </div>
         </div>
       </motion.div>
     </div>
