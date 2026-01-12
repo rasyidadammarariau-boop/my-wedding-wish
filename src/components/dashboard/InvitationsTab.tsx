@@ -143,15 +143,30 @@ const InvitationsTab = () => {
 
                   {/* Actions */}
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="flex-1">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex-1"
+                      onClick={() => navigate(`/demo/${invitation.template.toLowerCase().replace(' ', '-')}`)}
+                    >
                       <Eye className="h-4 w-4 mr-1" />
                       Preview
                     </Button>
-                    <Button variant="outline" size="sm" className="flex-1">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex-1"
+                      onClick={() => navigate(`/editor/${invitation.id}`)}
+                    >
                       <Edit className="h-4 w-4 mr-1" />
                       Edit
                     </Button>
-                    <Button variant="outline" size="sm" className="flex-1">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex-1"
+                      onClick={() => navigate("/dashboard?tab=guests")}
+                    >
                       <Users className="h-4 w-4 mr-1" />
                       Tamu
                     </Button>
