@@ -9,6 +9,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import { weddingData, galleryImages } from "./shared/WeddingData";
 import { useWeddingTemplate } from "./shared/useWeddingTemplate";
+import CountdownTimer from "@/components/invitation/CountdownTimer";
+import QRCodeGenerator from "@/components/invitation/QRCodeGenerator";
+import ShareButtons from "@/components/invitation/ShareButtons";
+import GuestBook from "@/components/invitation/GuestBook";
 
 const ElegantRoseDemo = () => {
   const navigate = useNavigate();
@@ -257,19 +261,10 @@ const ElegantRoseDemo = () => {
             <div className="max-w-4xl mx-auto text-center">
               <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
                 <h2 className="font-serif text-3xl text-rose-800 mb-8">Menuju Hari Bahagia</h2>
-                <div className="grid grid-cols-4 gap-4 max-w-md mx-auto mb-12">
-                  {[
-                    { value: countdown.days, label: "Hari" },
-                    { value: countdown.hours, label: "Jam" },
-                    { value: countdown.minutes, label: "Menit" },
-                    { value: countdown.seconds, label: "Detik" },
-                  ].map((item) => (
-                    <div key={item.label} className="bg-white rounded-2xl shadow-lg p-4 border border-rose-100">
-                      <div className="text-3xl font-bold text-rose-600">{item.value}</div>
-                      <div className="text-xs text-gray-500">{item.label}</div>
-                    </div>
-                  ))}
-                </div>
+                <CountdownTimer 
+                  targetDate={new Date("2026-02-15")} 
+                  className="mb-12"
+                />
               </motion.div>
 
               <div className="grid md:grid-cols-2 gap-8">
@@ -364,39 +359,40 @@ const ElegantRoseDemo = () => {
             </div>
           </section>
 
-          {/* RSVP */}
+          {/* Share & QR Code */}
           <section className="py-20 px-4 bg-white">
-            <div className="max-w-2xl mx-auto">
-              <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="font-serif text-3xl text-rose-800 text-center mb-12">
-                Ucapan & Doa
-              </motion.h2>
+            <div className="max-w-4xl mx-auto">
+              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+                <h2 className="font-serif text-3xl text-rose-800 mb-4">Bagikan Undangan</h2>
+                <p className="text-gray-600">Kirim undangan ini kepada keluarga dan teman-teman</p>
+              </motion.div>
 
-              <motion.form initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} onSubmit={handleSubmitComment} className="bg-rose-50 p-6 rounded-2xl mb-8 border border-rose-100">
-                <div className="space-y-4">
-                  <Input value={newComment.name} onChange={(e) => setNewComment({ ...newComment, name: e.target.value })} placeholder="Nama Anda" className="bg-white border-rose-200" />
-                  <select value={newComment.presence} onChange={(e) => setNewComment({ ...newComment, presence: e.target.value })} className="w-full px-3 py-2 rounded-md border border-rose-200 bg-white">
-                    <option value="hadir">✅ Hadir</option>
-                    <option value="tidak hadir">❌ Berhalangan</option>
-                  </select>
-                  <Textarea value={newComment.message} onChange={(e) => setNewComment({ ...newComment, message: e.target.value })} placeholder="Tulis ucapan..." rows={3} className="bg-white border-rose-200" />
-                  <Button type="submit" className="w-full bg-rose-500 hover:bg-rose-600">
-                    <Send className="h-4 w-4 mr-2" />
-                    Kirim
-                  </Button>
-                </div>
-              </motion.form>
+              <div className="grid md:grid-cols-2 gap-8 items-center">
+                <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="bg-rose-50 p-8 rounded-2xl border border-rose-100">
+                  <QRCodeGenerator 
+                    url={window.location.href}
+                    size={180}
+                  />
+                </motion.div>
 
-              <div className="space-y-4">
-                {comments.map((comment, i) => (
-                  <motion.div key={comment.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="bg-rose-50 p-4 rounded-xl border border-rose-100">
-                    <div className="flex justify-between mb-2">
-                      <span className="font-semibold text-rose-800">{comment.name}</span>
-                      <span className="text-xs text-gray-400">{comment.time}</span>
-                    </div>
-                    <p className="text-gray-600">{comment.message}</p>
-                  </motion.div>
-                ))}
+                <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="space-y-6">
+                  <h3 className="text-xl font-semibold text-rose-800 text-center md:text-left">Kirim via</h3>
+                  <ShareButtons 
+                    url={window.location.href}
+                    coupleName={`${weddingData.groomName} & ${weddingData.brideName}`}
+                    weddingDate={weddingData.date}
+                  />
+                </motion.div>
               </div>
+            </div>
+          </section>
+
+          {/* Guest Book */}
+          <section className="py-20 px-4 bg-gradient-to-b from-white to-rose-50">
+            <div className="max-w-2xl mx-auto">
+              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+                <GuestBook invitationId="elegant-rose-demo" />
+              </motion.div>
             </div>
           </section>
 

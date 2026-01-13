@@ -9,6 +9,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import { weddingData, galleryImages } from "./shared/WeddingData";
 import { useWeddingTemplate } from "./shared/useWeddingTemplate";
+import CountdownTimer from "@/components/invitation/CountdownTimer";
+import QRCodeGenerator from "@/components/invitation/QRCodeGenerator";
+import ShareButtons from "@/components/invitation/ShareButtons";
+import GuestBook from "@/components/invitation/GuestBook";
 
 const MinimalistWhiteDemo = () => {
   const navigate = useNavigate();
@@ -191,19 +195,10 @@ const MinimalistWhiteDemo = () => {
             <div className="max-w-4xl mx-auto text-center">
               <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
                 <p className="text-xs tracking-[0.5em] uppercase text-gray-400 mb-12">Counting Down</p>
-                <div className="grid grid-cols-4 gap-8 max-w-lg mx-auto mb-20">
-                  {[
-                    { value: countdown.days, label: "Days" },
-                    { value: countdown.hours, label: "Hours" },
-                    { value: countdown.minutes, label: "Minutes" },
-                    { value: countdown.seconds, label: "Seconds" },
-                  ].map((item) => (
-                    <div key={item.label}>
-                      <div className="text-4xl font-extralight">{item.value}</div>
-                      <div className="text-xs tracking-widest text-gray-400 mt-2 uppercase">{item.label}</div>
-                    </div>
-                  ))}
-                </div>
+                <CountdownTimer 
+                  targetDate={new Date("2026-02-15")} 
+                  className="mb-20"
+                />
               </motion.div>
 
               <div className="grid md:grid-cols-2 gap-12 max-w-3xl mx-auto">
@@ -270,32 +265,32 @@ const MinimalistWhiteDemo = () => {
             </div>
           </section>
 
-          {/* RSVP */}
+          {/* Share & QR */}
+          <section className="py-20 px-4">
+            <div className="max-w-4xl mx-auto">
+              <p className="text-xs tracking-[0.5em] uppercase text-gray-400 text-center mb-12">Share Invitation</p>
+              <div className="grid md:grid-cols-2 gap-12 items-center">
+                <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="border border-gray-100 p-8 flex justify-center">
+                  <QRCodeGenerator url={window.location.href} size={150} />
+                </motion.div>
+                <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="space-y-6">
+                  <p className="text-xs tracking-widest text-gray-400 text-center uppercase">Send Via</p>
+                  <ShareButtons 
+                    url={window.location.href}
+                    coupleName={`${weddingData.groomName} & ${weddingData.brideName}`}
+                    weddingDate={weddingData.date}
+                  />
+                </motion.div>
+              </div>
+            </div>
+          </section>
+
+          {/* Guest Book */}
           <section className="py-20 px-4 bg-gray-50">
             <div className="max-w-2xl mx-auto">
-              <p className="text-xs tracking-[0.5em] uppercase text-gray-400 text-center mb-12">Send Your Wishes</p>
-              <motion.form initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} onSubmit={handleSubmitComment} className="space-y-4 mb-12">
-                <Input value={newComment.name} onChange={(e) => setNewComment({ ...newComment, name: e.target.value })} placeholder="Name" className="rounded-none border-gray-200" />
-                <select value={newComment.presence} onChange={(e) => setNewComment({ ...newComment, presence: e.target.value })} className="w-full px-3 py-2 border border-gray-200">
-                  <option value="hadir">Attending</option>
-                  <option value="tidak hadir">Not Attending</option>
-                </select>
-                <Textarea value={newComment.message} onChange={(e) => setNewComment({ ...newComment, message: e.target.value })} placeholder="Your message..." rows={3} className="rounded-none border-gray-200" />
-                <Button type="submit" className="w-full rounded-none bg-gray-900 hover:bg-gray-800">
-                  Send
-                </Button>
-              </motion.form>
-              <div className="space-y-4">
-                {comments.map((c) => (
-                  <div key={c.id} className="border border-gray-100 p-4">
-                    <div className="flex justify-between text-sm mb-2">
-                      <span className="font-medium">{c.name}</span>
-                      <span className="text-gray-400 text-xs">{c.time}</span>
-                    </div>
-                    <p className="text-gray-600 text-sm">{c.message}</p>
-                  </div>
-                ))}
-              </div>
+              <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+                <GuestBook invitationId="minimalist-white-demo" />
+              </motion.div>
             </div>
           </section>
 
