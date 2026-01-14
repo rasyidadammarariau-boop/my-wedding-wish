@@ -1,24 +1,30 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
-  ArrowLeft, Calendar, MapPin, Heart, Clock, ChevronDown, Gift,
-  CreditCard, Copy, Check, Send, Music, VolumeX, ChevronLeft, ChevronRight, Leaf,
+  ArrowLeft, Calendar, MapPin, Clock, ChevronDown, Gift,
+  CreditCard, Copy, Check, Music, VolumeX, ChevronLeft, ChevronRight, Leaf,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { weddingData, galleryImages } from "./shared/WeddingData";
 import { useWeddingTemplate } from "./shared/useWeddingTemplate";
+import CountdownTimer from "@/components/invitation/CountdownTimer";
+import QRCodeGenerator from "@/components/invitation/QRCodeGenerator";
+import ShareButtons from "@/components/invitation/ShareButtons";
+import GuestBook from "@/components/invitation/GuestBook";
+import ExportButton from "@/components/invitation/ExportButton";
+
+import { useRef } from "react";
 
 const RusticGardenDemo = () => {
   const navigate = useNavigate();
+  const invitationRef = useRef<HTMLDivElement>(null);
   const {
     isOpen, setIsOpen, isMuted, setIsMuted, copied, activeGallery, setActiveGallery,
     countdown, comments, newComment, setNewComment, copyToClipboard, handleSubmitComment,
   } = useWeddingTemplate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 via-emerald-50 to-green-100 text-gray-800">
+    <div ref={invitationRef} className="min-h-screen bg-gradient-to-b from-green-50 via-emerald-50 to-green-100 text-gray-800">
       {/* Opening Cover - Garden Theme */}
       <AnimatePresence>
         {!isOpen && (
@@ -336,35 +342,39 @@ const RusticGardenDemo = () => {
             </div>
           </section>
 
-          {/* RSVP */}
+          {/* Countdown Timer */}
           <section className="py-20 px-4 bg-white">
-            <div className="max-w-2xl mx-auto">
-              <h2 className="text-3xl font-serif text-green-800 text-center mb-12">Ucapan & Doa</h2>
-              <motion.form initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} onSubmit={handleSubmitComment} className="bg-green-50 p-6 rounded-2xl border border-green-100 mb-8">
-                <div className="space-y-4">
-                  <Input value={newComment.name} onChange={(e) => setNewComment({ ...newComment, name: e.target.value })} placeholder="Nama" className="bg-white border-green-200" />
-                  <select value={newComment.presence} onChange={(e) => setNewComment({ ...newComment, presence: e.target.value })} className="w-full px-3 py-2 bg-white border border-green-200 rounded-md">
-                    <option value="hadir">✅ Hadir</option>
-                    <option value="tidak hadir">❌ Berhalangan</option>
-                  </select>
-                  <Textarea value={newComment.message} onChange={(e) => setNewComment({ ...newComment, message: e.target.value })} placeholder="Tulis ucapan..." rows={3} className="bg-white border-green-200" />
-                  <Button type="submit" className="w-full bg-green-600 hover:bg-green-700">
-                    <Send className="h-4 w-4 mr-2" />
-                    Kirim
-                  </Button>
-                </div>
-              </motion.form>
+            <div className="max-w-4xl mx-auto text-center">
+              <Leaf className="h-8 w-8 mx-auto mb-4 text-green-600" />
+              <h2 className="text-3xl font-serif text-green-800 mb-8">Menghitung Hari</h2>
+              <CountdownTimer targetDate={new Date("2026-02-15")} />
+            </div>
+          </section>
 
-              <div className="space-y-4">
-                {comments.map((c) => (
-                  <div key={c.id} className="bg-green-50 p-4 rounded-xl border border-green-100">
-                    <div className="flex justify-between mb-2">
-                      <span className="font-semibold text-green-800">{c.name}</span>
-                      <span className="text-xs text-gray-400">{c.time}</span>
-                    </div>
-                    <p className="text-gray-600">{c.message}</p>
+          {/* Guest Book */}
+          <section className="py-20 px-4 bg-green-50">
+            <GuestBook />
+          </section>
+
+          {/* QR Code & Share */}
+          <section className="py-20 px-4 bg-white">
+            <div className="max-w-4xl mx-auto">
+              <div className="grid md:grid-cols-2 gap-8 items-start">
+                <div className="text-center">
+                  <h3 className="text-2xl font-serif text-green-800 mb-6">QR Code Undangan</h3>
+                  <QRCodeGenerator url={window.location.href} />
+                </div>
+                <div className="text-center">
+                  <h3 className="text-2xl font-serif text-green-800 mb-6">Bagikan Undangan</h3>
+                  <ShareButtons 
+                    url={window.location.href}
+                    coupleName={`${weddingData.groomName} & ${weddingData.brideName}`}
+                    weddingDate={weddingData.date}
+                  />
+                  <div className="mt-6">
+                    <ExportButton targetRef={invitationRef} />
                   </div>
-                ))}
+                </div>
               </div>
             </div>
           </section>
