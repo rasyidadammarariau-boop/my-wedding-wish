@@ -12,6 +12,8 @@ import QRCodeGenerator from "@/components/invitation/QRCodeGenerator";
 import ShareButtons from "@/components/invitation/ShareButtons";
 import GuestBook from "@/components/invitation/GuestBook";
 import ExportButton from "@/components/invitation/ExportButton";
+import MusicPlayer from "@/components/invitation/MusicPlayer";
+import LoveStoryTimeline from "@/components/invitation/LoveStoryTimeline";
 
 import { useRef } from "react";
 
@@ -159,11 +161,8 @@ const ClassicGoldDemo = () => {
           Kembali
         </Button>
       </div>
-      <div className="fixed top-4 right-4 z-40">
-        <Button variant="secondary" size="icon" onClick={() => setIsMuted(!isMuted)} className="bg-white/80 backdrop-blur shadow-lg border-amber-200">
-          {isMuted ? <VolumeX className="h-4 w-4" /> : <Music className="h-4 w-4" />}
-        </Button>
-      </div>
+      {/* Music Player */}
+      {isOpen && <MusicPlayer accentColor="amber" />}
 
       {isOpen && (
         <div className="relative">
@@ -248,6 +247,17 @@ const ClassicGoldDemo = () => {
               <p className="text-amber-600 mt-6">— QS. Ar-Rum: 21</p>
               <div className="text-amber-300 text-6xl mt-4">❞</div>
             </motion.div>
+          </section>
+
+          {/* Love Story Timeline */}
+          <section className="py-20 px-4 bg-gradient-to-b from-white to-amber-50">
+            <div className="max-w-4xl mx-auto">
+              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+                <h2 className="font-serif text-3xl text-amber-800 mb-4">Kisah Cinta Kami</h2>
+                <p className="text-gray-600">Perjalanan cinta yang membawa kami ke hari bahagia ini</p>
+              </motion.div>
+              <LoveStoryTimeline stories={weddingData.story} variant="elegant" accentColor="amber" />
+            </div>
           </section>
 
           {/* Countdown */}
