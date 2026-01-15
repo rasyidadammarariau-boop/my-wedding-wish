@@ -13,6 +13,8 @@ import CountdownTimer from "@/components/invitation/CountdownTimer";
 import QRCodeGenerator from "@/components/invitation/QRCodeGenerator";
 import ShareButtons from "@/components/invitation/ShareButtons";
 import GuestBook from "@/components/invitation/GuestBook";
+import MusicPlayer from "@/components/invitation/MusicPlayer";
+import LoveStoryTimeline from "@/components/invitation/LoveStoryTimeline";
 
 const ElegantRoseDemo = () => {
   const navigate = useNavigate();
@@ -142,11 +144,8 @@ const ElegantRoseDemo = () => {
           Kembali
         </Button>
       </div>
-      <div className="fixed top-4 right-4 z-40">
-        <Button variant="secondary" size="icon" onClick={() => setIsMuted(!isMuted)} className="shadow-lg bg-white/80 backdrop-blur">
-          {isMuted ? <VolumeX className="h-4 w-4" /> : <Music className="h-4 w-4" />}
-        </Button>
-      </div>
+      {/* Music Player */}
+      {isOpen && <MusicPlayer accentColor="rose" />}
 
       {/* Main Content */}
       {isOpen && (
@@ -254,6 +253,17 @@ const ElegantRoseDemo = () => {
               </p>
               <p className="text-rose-600">— QS. Ar-Rum: 21</p>
             </motion.div>
+          </section>
+
+          {/* Love Story Timeline */}
+          <section className="py-20 px-4 bg-gradient-to-b from-white to-rose-50">
+            <div className="max-w-4xl mx-auto">
+              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+                <h2 className="font-serif text-3xl text-rose-800 mb-4">Kisah Cinta Kami</h2>
+                <p className="text-gray-600">Perjalanan cinta yang membawa kami ke hari bahagia ini</p>
+              </motion.div>
+              <LoveStoryTimeline stories={weddingData.story} variant="classic" accentColor="rose" />
+            </div>
           </section>
 
           {/* Countdown */}

@@ -12,6 +12,8 @@ import QRCodeGenerator from "@/components/invitation/QRCodeGenerator";
 import ShareButtons from "@/components/invitation/ShareButtons";
 import GuestBook from "@/components/invitation/GuestBook";
 import ExportButton from "@/components/invitation/ExportButton";
+import MusicPlayer from "@/components/invitation/MusicPlayer";
+import LoveStoryTimeline from "@/components/invitation/LoveStoryTimeline";
 
 import { useRef } from "react";
 
@@ -146,11 +148,8 @@ const RusticGardenDemo = () => {
           Kembali
         </Button>
       </div>
-      <div className="fixed top-4 right-4 z-40">
-        <Button variant="secondary" size="icon" onClick={() => setIsMuted(!isMuted)} className="bg-white/80 backdrop-blur shadow-lg">
-          {isMuted ? <VolumeX className="h-4 w-4" /> : <Music className="h-4 w-4" />}
-        </Button>
-      </div>
+      {/* Music Player */}
+      {isOpen && <MusicPlayer accentColor="emerald" />}
 
       {isOpen && (
         <div className="relative">
@@ -242,6 +241,18 @@ const RusticGardenDemo = () => {
               </p>
               <p className="text-green-600 mt-6">— QS. Ar-Rum: 21</p>
             </motion.div>
+          </section>
+
+          {/* Love Story Timeline */}
+          <section className="py-20 px-4 bg-gradient-to-b from-white to-green-50">
+            <div className="max-w-4xl mx-auto">
+              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+                <Leaf className="h-10 w-10 mx-auto mb-4 text-green-600" />
+                <h2 className="font-serif text-3xl text-green-800 mb-4">Kisah Cinta Kami</h2>
+                <p className="text-gray-600">Perjalanan cinta yang membawa kami ke hari bahagia ini</p>
+              </motion.div>
+              <LoveStoryTimeline stories={weddingData.story} variant="classic" accentColor="emerald" />
+            </div>
           </section>
 
           {/* Countdown */}

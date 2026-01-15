@@ -12,6 +12,8 @@ import QRCodeGenerator from "@/components/invitation/QRCodeGenerator";
 import ShareButtons from "@/components/invitation/ShareButtons";
 import GuestBook from "@/components/invitation/GuestBook";
 import ExportButton from "@/components/invitation/ExportButton";
+import MusicPlayer from "@/components/invitation/MusicPlayer";
+import LoveStoryTimeline from "@/components/invitation/LoveStoryTimeline";
 
 import { useRef } from "react";
 
@@ -139,11 +141,8 @@ const ModernDarkDemo = () => {
           Back
         </Button>
       </div>
-      <div className="fixed top-4 right-4 z-40">
-        <Button variant="secondary" size="icon" onClick={() => setIsMuted(!isMuted)} className="bg-gray-800/80 backdrop-blur border-gray-700 text-white hover:bg-gray-700">
-          {isMuted ? <VolumeX className="h-4 w-4" /> : <Music className="h-4 w-4" />}
-        </Button>
-      </div>
+      {/* Music Player */}
+      {isOpen && <MusicPlayer accentColor="slate" />}
 
       {isOpen && (
         <div className="relative">
@@ -228,6 +227,18 @@ const ModernDarkDemo = () => {
               </p>
               <p className="text-amber-400 mt-6">— QS. Ar-Rum: 21</p>
             </motion.div>
+          </section>
+
+          {/* Love Story Timeline */}
+          <section className="py-24 px-4 bg-gray-950">
+            <div className="max-w-4xl mx-auto">
+              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+                <Sparkles className="h-8 w-8 mx-auto mb-4 text-amber-400" />
+                <h2 className="text-3xl font-bold text-amber-400 mb-4">Our Story</h2>
+                <p className="text-gray-400">The journey that brought us together</p>
+              </motion.div>
+              <LoveStoryTimeline stories={weddingData.story} variant="modern" accentColor="slate" />
+            </div>
           </section>
 
           {/* Countdown */}
