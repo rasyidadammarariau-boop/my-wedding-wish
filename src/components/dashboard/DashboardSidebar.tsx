@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Heart,
@@ -11,6 +11,8 @@ import {
   CreditCard,
   MessageSquare,
   BarChart3,
+  Music,
+  FileEdit,
 } from "lucide-react";
 
 interface DashboardSidebarProps {
@@ -31,6 +33,8 @@ const userNavItems = [
 const adminNavItems = [
   { id: "overview", label: "Dashboard", icon: Home },
   { id: "templates", label: "Kelola Template", icon: LayoutTemplate },
+  { id: "music", label: "Library Musik", icon: Music },
+  { id: "default-content", label: "Konten Default", icon: FileEdit },
   { id: "users", label: "Kelola User", icon: Users },
   { id: "orders", label: "Pesanan", icon: CreditCard },
   { id: "analytics", label: "Statistik", icon: BarChart3 },
