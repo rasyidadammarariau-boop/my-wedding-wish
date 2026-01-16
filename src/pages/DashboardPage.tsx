@@ -14,6 +14,8 @@ import InvitationsTab from "@/components/dashboard/InvitationsTab";
 import GuestsTab from "@/components/dashboard/GuestsTab";
 import MessagesTab from "@/components/dashboard/MessagesTab";
 import SettingsTab from "@/components/dashboard/SettingsTab";
+import MusicLibraryTab from "@/components/dashboard/MusicLibraryTab";
+import DefaultContentTab from "@/components/dashboard/DefaultContentTab";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
@@ -35,6 +37,8 @@ const DashboardPage = () => {
     const titles: Record<string, string> = {
       overview: "Dashboard",
       templates: "Kelola Template",
+      music: "Library Musik",
+      "default-content": "Konten Default",
       users: "Kelola User",
       orders: "Pesanan",
       analytics: "Statistik",
@@ -52,6 +56,10 @@ const DashboardPage = () => {
         return <OverviewTab isAdmin={isAdmin} />;
       case "templates":
         return <TemplatesManagementTab />;
+      case "music":
+        return <MusicLibraryTab />;
+      case "default-content":
+        return <DefaultContentTab />;
       case "users":
         return <UsersManagementTab />;
       case "orders":
