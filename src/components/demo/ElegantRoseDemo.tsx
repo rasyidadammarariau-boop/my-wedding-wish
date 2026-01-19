@@ -7,7 +7,7 @@ import {
   CreditCard, Copy, Check, Send, Music, VolumeX, ChevronLeft, ChevronRight,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { weddingData, galleryImages } from "./shared/WeddingData";
+import { galleryImages } from "./shared/WeddingData";
 import { useWeddingTemplate } from "./shared/useWeddingTemplate";
 import CountdownTimer from "@/components/invitation/CountdownTimer";
 import QRCodeGenerator from "@/components/invitation/QRCodeGenerator";
@@ -21,7 +21,8 @@ const ElegantRoseDemo = () => {
   const {
     isOpen, setIsOpen, isMuted, setIsMuted, copied, activeGallery, setActiveGallery,
     countdown, comments, newComment, setNewComment, copyToClipboard, handleSubmitComment,
-  } = useWeddingTemplate();
+    weddingData, songs, hasFeature,
+  } = useWeddingTemplate("elegant-rose");
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-rose-50 via-pink-50 to-rose-100 text-gray-800">

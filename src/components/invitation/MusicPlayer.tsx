@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Music, Pause, Play, Volume2, VolumeX, SkipBack, SkipForward } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { getActiveMusicTracks } from "@/stores/adminSettingsStore";
 
 interface Song {
   title: string;
@@ -17,21 +18,35 @@ interface MusicPlayerProps {
   accentColor?: string;
 }
 
-const defaultSongs: Song[] = [
-  { title: "Beautiful In White", artist: "Shane Filan", url: "/music/beautiful-in-white.mp3" },
-  { title: "Perfect", artist: "Ed Sheeran", url: "/music/perfect.mp3" },
-  { title: "A Thousand Years", artist: "Christina Perri", url: "/music/a-thousand-years.mp3" },
-  { title: "All of Me", artist: "John Legend", url: "/music/all-of-me.mp3" },
-  { title: "Can't Help Falling In Love", artist: "Elvis Presley", url: "/music/cant-help-falling.mp3" },
-];
+// Get songs from admin settings, with fallback
+const getDefaultSongs = (): Song[] => {
+  const tracks = getActiveMusicTracks();
+  if (tracks.length > 0) {
+    return tracks.map(track => ({
+      title: track.title,
+      artist: track.artist,
+      url: track.url,
+    }));
+  }
+  // Fallback if no tracks configured
+  return [
+    { title: "Beautiful In White", artist: "Shane Filan", url: "/music/beautiful-in-white.mp3" },
+    { title: "Perfect", artist: "Ed Sheeran", url: "/music/perfect.mp3" },
+    { title: "A Thousand Years", artist: "Christina Perri", url: "/music/a-thousand-years.mp3" },
+    { title: "All of Me", artist: "John Legend", url: "/music/all-of-me.mp3" },
+    { title: "Can't Help Falling In Love", artist: "Elvis Presley", url: "/music/cant-help-falling.mp3" },
+  ];
+};
 
 const MusicPlayer = ({ 
-  songs = defaultSongs, 
+  songs, 
   autoPlay = false, 
   className = "",
   variant = "floating",
   accentColor = "rose"
 }: MusicPlayerProps) => {
+  // Use provided songs or get from admin settings
+  const playerSongs = songs && songs.length > 0 ? songs : getDefaultSongs();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
@@ -39,7 +54,7 @@ const MusicPlayer = ({
   const [progress, setProgress] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  const currentSong = songs[currentSongIndex];
+  const currentSong = playerSongs[currentSongIndex];
 
   useEffect(() => {
     if (autoPlay && audioRef.current) {
@@ -82,13 +97,13 @@ const MusicPlayer = ({
   };
 
   const nextSong = () => {
-    setCurrentSongIndex((prev) => (prev + 1) % songs.length);
+    setCurrentSongIndex((prev) => (prev + 1) % playerSongs.length);
     setIsPlaying(true);
     setTimeout(() => audioRef.current?.play(), 100);
   };
 
   const prevSong = () => {
-    setCurrentSongIndex((prev) => (prev - 1 + songs.length) % songs.length);
+    setCurrentSongIndex((prev) => (prev - 1 + playerSongs.length) % playerSongs.length);
     setIsPlaying(true);
     setTimeout(() => audioRef.current?.play(), 100);
   };
@@ -209,11 +224,11 @@ const MusicPlayer = ({
         </div>
 
         {/* Playlist */}
-        {songs.length > 1 && (
+        {playerSongs.length > 1 && (
           <div className="mt-4 pt-4 border-t border-gray-200">
-            <p className="text-xs text-gray-500 mb-2">Daftar Lagu ({songs.length})</p>
+            <p className="text-xs text-gray-500 mb-2">Daftar Lagu ({playerSongs.length})</p>
             <div className="space-y-1 max-h-32 overflow-y-auto">
-              {songs.map((song, index) => (
+              {playerSongs.map((song, index) => (
                 <button
                   key={index}
                   onClick={() => selectSong(index)}
@@ -288,9 +303,9 @@ const MusicPlayer = ({
               </div>
 
               {/* Song list */}
-              {songs.length > 1 && (
+              {playerSongs.length > 1 && (
                 <div className="border-t border-gray-200 max-h-40 overflow-y-auto">
-                  {songs.map((song, index) => (
+                  {playerSongs.map((song, index) => (
                     <button
                       key={index}
                       onClick={() => selectSong(index)}
