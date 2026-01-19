@@ -5,7 +5,7 @@ import {
   CreditCard, Copy, Check, Music, VolumeX, ChevronLeft, ChevronRight,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { weddingData, galleryImages } from "./shared/WeddingData";
+import { galleryImages } from "./shared/WeddingData";
 import { useWeddingTemplate } from "./shared/useWeddingTemplate";
 import CountdownTimer from "@/components/invitation/CountdownTimer";
 import QRCodeGenerator from "@/components/invitation/QRCodeGenerator";
@@ -23,7 +23,8 @@ const FloralDreamDemo = () => {
   const {
     isOpen, setIsOpen, isMuted, setIsMuted, copied, activeGallery, setActiveGallery,
     countdown, comments, newComment, setNewComment, copyToClipboard, handleSubmitComment,
-  } = useWeddingTemplate();
+    weddingData, songs, hasFeature,
+  } = useWeddingTemplate("floral-dream");
 
   return (
     <div ref={invitationRef} className="min-h-screen bg-gradient-to-b from-pink-50 via-purple-50 to-pink-100 text-gray-800">

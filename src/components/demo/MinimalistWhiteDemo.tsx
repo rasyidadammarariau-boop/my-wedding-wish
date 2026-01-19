@@ -7,7 +7,7 @@ import {
   CreditCard, Copy, Check, Send, Music, VolumeX, ChevronLeft, ChevronRight,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { weddingData, galleryImages } from "./shared/WeddingData";
+import { galleryImages } from "./shared/WeddingData";
 import { useWeddingTemplate } from "./shared/useWeddingTemplate";
 import CountdownTimer from "@/components/invitation/CountdownTimer";
 import QRCodeGenerator from "@/components/invitation/QRCodeGenerator";
@@ -19,7 +19,8 @@ const MinimalistWhiteDemo = () => {
   const {
     isOpen, setIsOpen, isMuted, setIsMuted, copied, activeGallery, setActiveGallery,
     countdown, comments, newComment, setNewComment, copyToClipboard, handleSubmitComment,
-  } = useWeddingTemplate();
+    weddingData, hasFeature,
+  } = useWeddingTemplate("minimalist-white");
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
