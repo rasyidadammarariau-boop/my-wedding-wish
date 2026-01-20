@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   ArrowLeft, Calendar, MapPin, Heart, Clock, ChevronDown, Gift,
-  CreditCard, Copy, Check, Send, Music, VolumeX, ChevronLeft, ChevronRight,
+  CreditCard, Copy, Check, Send, Music, VolumeX, ChevronLeft, ChevronRight, Expand,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { galleryImages } from "./shared/WeddingData";
@@ -15,6 +15,8 @@ import ShareButtons from "@/components/invitation/ShareButtons";
 import GuestBook from "@/components/invitation/GuestBook";
 import MusicPlayer from "@/components/invitation/MusicPlayer";
 import LoveStoryTimeline from "@/components/invitation/LoveStoryTimeline";
+import LightboxGallery from "@/components/invitation/LightboxGallery";
+import { useLightbox } from "@/hooks/useLightbox";
 
 const ElegantRoseDemo = () => {
   const navigate = useNavigate();
@@ -23,6 +25,8 @@ const ElegantRoseDemo = () => {
     countdown, comments, newComment, setNewComment, copyToClipboard, handleSubmitComment,
     weddingData, songs, hasFeature,
   } = useWeddingTemplate("elegant-rose");
+  
+  const { isOpen: lightboxOpen, currentIndex, openLightbox, closeLightbox } = useLightbox();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-rose-50 via-pink-50 to-rose-100 text-gray-800">
@@ -312,23 +316,27 @@ const ElegantRoseDemo = () => {
               <motion.h2 initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="font-serif text-3xl text-rose-800 text-center mb-12">
                 Galeri Foto
               </motion.h2>
-              <div className="relative">
+              <div className="relative group cursor-pointer" onClick={() => openLightbox(activeGallery)}>
                 <motion.img key={activeGallery} initial={{ opacity: 0 }} animate={{ opacity: 1 }} src={galleryImages[activeGallery]} alt="Gallery" className="w-full h-80 md:h-96 object-cover rounded-2xl shadow-xl" />
-                <button onClick={() => setActiveGallery((prev) => (prev === 0 ? galleryImages.length - 1 : prev - 1))} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/80 backdrop-blur rounded-full shadow-lg">
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors rounded-2xl flex items-center justify-center">
+                  <Expand className="h-12 w-12 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+                <button onClick={(e) => { e.stopPropagation(); setActiveGallery((prev) => (prev === 0 ? galleryImages.length - 1 : prev - 1)); }} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/80 backdrop-blur rounded-full shadow-lg">
                   <ChevronLeft className="h-6 w-6 text-rose-600" />
                 </button>
-                <button onClick={() => setActiveGallery((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1))} className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/80 backdrop-blur rounded-full shadow-lg">
+                <button onClick={(e) => { e.stopPropagation(); setActiveGallery((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1)); }} className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/80 backdrop-blur rounded-full shadow-lg">
                   <ChevronRight className="h-6 w-6 text-rose-600" />
                 </button>
               </div>
               <div className="flex gap-2 justify-center mt-4">
                 {galleryImages.map((img, index) => (
-                  <button key={index} onClick={() => setActiveGallery(index)} className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${activeGallery === index ? "border-rose-500 scale-110" : "border-transparent opacity-60"}`}>
+                  <button key={index} onClick={() => openLightbox(index)} className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition-all hover:scale-105 ${activeGallery === index ? "border-rose-500 scale-110" : "border-transparent opacity-60 hover:opacity-100"}`}>
                     <img src={img} alt="" className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
             </div>
+            <LightboxGallery images={galleryImages} initialIndex={currentIndex} isOpen={lightboxOpen} onClose={closeLightbox} />
           </section>
 
           {/* Love Gift */}

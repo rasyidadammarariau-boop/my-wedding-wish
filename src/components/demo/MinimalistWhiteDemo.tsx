@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   ArrowLeft, Calendar, MapPin, Heart, Clock, ChevronDown, Gift,
-  CreditCard, Copy, Check, Send, Music, VolumeX, ChevronLeft, ChevronRight,
+  CreditCard, Copy, Check, Send, Music, VolumeX, ChevronLeft, ChevronRight, Expand,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { galleryImages } from "./shared/WeddingData";
@@ -13,6 +13,8 @@ import CountdownTimer from "@/components/invitation/CountdownTimer";
 import QRCodeGenerator from "@/components/invitation/QRCodeGenerator";
 import ShareButtons from "@/components/invitation/ShareButtons";
 import GuestBook from "@/components/invitation/GuestBook";
+import LightboxGallery from "@/components/invitation/LightboxGallery";
+import { useLightbox } from "@/hooks/useLightbox";
 
 const MinimalistWhiteDemo = () => {
   const navigate = useNavigate();
@@ -21,6 +23,8 @@ const MinimalistWhiteDemo = () => {
     countdown, comments, newComment, setNewComment, copyToClipboard, handleSubmitComment,
     weddingData, hasFeature,
   } = useWeddingTemplate("minimalist-white");
+  
+  const { isOpen: lightboxOpen, currentIndex, openLightbox, closeLightbox } = useLightbox();
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
@@ -229,16 +233,20 @@ const MinimalistWhiteDemo = () => {
           <section className="py-20 px-4 bg-gray-50">
             <div className="max-w-4xl mx-auto">
               <p className="text-xs tracking-[0.5em] uppercase text-gray-400 text-center mb-12">Gallery</p>
-              <div className="relative">
+              <div className="relative group cursor-pointer" onClick={() => openLightbox(activeGallery)}>
                 <motion.img key={activeGallery} initial={{ opacity: 0 }} animate={{ opacity: 1 }} src={galleryImages[activeGallery]} alt="Gallery" className="w-full h-96 object-cover grayscale hover:grayscale-0 transition-all duration-700" />
-                <button onClick={() => setActiveGallery((prev) => (prev === 0 ? galleryImages.length - 1 : prev - 1))} className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white">
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                  <Expand className="h-12 w-12 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+                <button onClick={(e) => { e.stopPropagation(); setActiveGallery((prev) => (prev === 0 ? galleryImages.length - 1 : prev - 1)); }} className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white">
                   <ChevronLeft className="h-6 w-6" />
                 </button>
-                <button onClick={() => setActiveGallery((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1))} className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white">
+                <button onClick={(e) => { e.stopPropagation(); setActiveGallery((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1)); }} className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white">
                   <ChevronRight className="h-6 w-6" />
                 </button>
               </div>
             </div>
+            <LightboxGallery images={galleryImages} initialIndex={currentIndex} isOpen={lightboxOpen} onClose={closeLightbox} />
           </section>
 
           {/* Gift */}

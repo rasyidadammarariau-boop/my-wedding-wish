@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {
   ArrowLeft, Calendar, MapPin, Clock, ChevronDown, Gift,
-  CreditCard, Copy, Check, Music, VolumeX, ChevronLeft, ChevronRight, Leaf,
+  CreditCard, Copy, Check, Music, VolumeX, ChevronLeft, ChevronRight, Leaf, Expand,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { galleryImages } from "./shared/WeddingData";
@@ -14,6 +14,8 @@ import GuestBook from "@/components/invitation/GuestBook";
 import ExportButton from "@/components/invitation/ExportButton";
 import MusicPlayer from "@/components/invitation/MusicPlayer";
 import LoveStoryTimeline from "@/components/invitation/LoveStoryTimeline";
+import LightboxGallery from "@/components/invitation/LightboxGallery";
+import { useLightbox } from "@/hooks/useLightbox";
 
 import { useRef } from "react";
 
@@ -25,6 +27,8 @@ const RusticGardenDemo = () => {
     countdown, comments, newComment, setNewComment, copyToClipboard, handleSubmitComment,
     weddingData, songs, hasFeature,
   } = useWeddingTemplate("rustic-garden");
+  
+  const { isOpen: lightboxOpen, currentIndex, openLightbox, closeLightbox } = useLightbox();
 
   return (
     <div ref={invitationRef} className="min-h-screen bg-gradient-to-b from-green-50 via-emerald-50 to-green-100 text-gray-800">
@@ -308,16 +312,20 @@ const RusticGardenDemo = () => {
           <section className="py-20 px-4 bg-white">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-3xl font-serif text-green-800 text-center mb-12">Galeri</h2>
-              <div className="relative">
+              <div className="relative group cursor-pointer" onClick={() => openLightbox(activeGallery)}>
                 <motion.img key={activeGallery} initial={{ opacity: 0 }} animate={{ opacity: 1 }} src={galleryImages[activeGallery]} alt="Gallery" className="w-full h-80 md:h-96 object-cover rounded-2xl shadow-xl" />
-                <button onClick={() => setActiveGallery((prev) => (prev === 0 ? galleryImages.length - 1 : prev - 1))} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/80 backdrop-blur rounded-full shadow-lg">
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors rounded-2xl flex items-center justify-center">
+                  <Expand className="h-12 w-12 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+                <button onClick={(e) => { e.stopPropagation(); setActiveGallery((prev) => (prev === 0 ? galleryImages.length - 1 : prev - 1)); }} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/80 backdrop-blur rounded-full shadow-lg">
                   <ChevronLeft className="h-6 w-6 text-green-600" />
                 </button>
-                <button onClick={() => setActiveGallery((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1))} className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/80 backdrop-blur rounded-full shadow-lg">
+                <button onClick={(e) => { e.stopPropagation(); setActiveGallery((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1)); }} className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/80 backdrop-blur rounded-full shadow-lg">
                   <ChevronRight className="h-6 w-6 text-green-600" />
                 </button>
               </div>
             </div>
+            <LightboxGallery images={galleryImages} initialIndex={currentIndex} isOpen={lightboxOpen} onClose={closeLightbox} />
           </section>
 
           {/* Gift */}
