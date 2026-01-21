@@ -1,10 +1,11 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {
   ArrowLeft, Calendar, MapPin, Heart, Clock, ChevronDown, Gift,
   CreditCard, Copy, Check, ChevronLeft, ChevronRight, Expand,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
 import { galleryImages } from "./shared/WeddingData";
 import { useWeddingTemplate } from "./shared/useWeddingTemplate";
 import CountdownTimer from "@/components/invitation/CountdownTimer";
@@ -16,15 +17,25 @@ import LoveStoryTimeline from "@/components/invitation/LoveStoryTimeline";
 import LightboxGallery from "@/components/invitation/LightboxGallery";
 import VenueMap from "@/components/invitation/VenueMap";
 import { useLightbox } from "@/hooks/useLightbox";
+import ParallaxSection, { ParallaxElement, FloatingElement } from "@/components/invitation/ParallaxSection";
 
 const BatikJawaDemo = () => {
   const navigate = useNavigate();
+  const containerRef = useRef<HTMLDivElement>(null);
   const {
     isOpen, setIsOpen, copied, activeGallery, setActiveGallery,
     weddingData, copyToClipboard, hasFeature,
   } = useWeddingTemplate("batik-jawa");
   
   const { isOpen: lightboxOpen, currentIndex, openLightbox, closeLightbox } = useLightbox();
+  
+  // Parallax scroll effects
+  const { scrollYProgress } = useScroll({ target: containerRef });
+  const heroY = useTransform(scrollYProgress, [0, 0.2], [0, -100]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
+  const decorY = useTransform(scrollYProgress, [0, 1], [0, -200]);
+  const decorY2 = useTransform(scrollYProgress, [0, 1], [0, -150]);
+  const decorY3 = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
   // Batik pattern SVG for decorations
   const BatikPattern = ({ className = "" }: { className?: string }) => (
@@ -42,7 +53,31 @@ const BatikJawaDemo = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 via-orange-50 to-amber-100 text-amber-900">
+    <div ref={containerRef} className="min-h-screen bg-gradient-to-b from-amber-50 via-orange-50 to-amber-100 text-amber-900">
+      {/* Floating Parallax Decorations */}
+      {isOpen && (
+        <>
+          <motion.div 
+            className="fixed top-20 left-10 text-6xl text-amber-600/20 pointer-events-none z-0"
+            style={{ y: decorY }}
+          >
+            ☸
+          </motion.div>
+          <motion.div 
+            className="fixed top-40 right-10 text-4xl text-amber-500/15 pointer-events-none z-0"
+            style={{ y: decorY2 }}
+          >
+            🏛️
+          </motion.div>
+          <motion.div 
+            className="fixed bottom-40 left-20 text-5xl text-amber-400/10 pointer-events-none z-0"
+            style={{ y: decorY3 }}
+          >
+            ❧
+          </motion.div>
+        </>
+      )}
+      
       {/* Opening Cover - Batik Jawa Theme */}
       <AnimatePresence>
         {!isOpen && (
