@@ -14,6 +14,7 @@ import GuestBook from "@/components/invitation/GuestBook";
 import MusicPlayer from "@/components/invitation/MusicPlayer";
 import LoveStoryTimeline from "@/components/invitation/LoveStoryTimeline";
 import LightboxGallery from "@/components/invitation/LightboxGallery";
+import VenueMap from "@/components/invitation/VenueMap";
 import { useLightbox } from "@/hooks/useLightbox";
 
 const BatikJawaDemo = () => {
@@ -368,11 +369,20 @@ const BatikJawaDemo = () => {
                 </div>
                 <h3 className="text-xl font-semibold text-amber-900 mb-2">{weddingData.venue}</h3>
                 <p className="text-amber-700 mb-4">{weddingData.address}</p>
-                <Button onClick={() => window.open(weddingData.mapsUrl, "_blank")} className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700">
-                  <MapPin className="h-4 w-4 mr-2" />
-                  Buka Google Maps
-                </Button>
               </motion.div>
+            </div>
+          </section>
+
+          {/* Venue Map */}
+          <section className="py-20 px-4 bg-gradient-to-b from-amber-50 to-white">
+            <div className="max-w-2xl mx-auto">
+              <VenueMap
+                venueName={weddingData.venue}
+                address={weddingData.address}
+                latitude={-7.7956}
+                longitude={110.3695}
+                googleMapsUrl={weddingData.mapsUrl}
+              />
             </div>
           </section>
 
