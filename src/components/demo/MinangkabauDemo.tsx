@@ -430,7 +430,7 @@ const MinangkabauDemo = () => {
                 <h2 className="font-serif text-3xl text-red-800 mb-4">Ucapan & Doa</h2>
                 <p className="text-red-600">Berikan ucapan dan doa terbaik untuk kedua mempelai</p>
               </motion.div>
-              <GuestBook accentColor="red" />
+              <GuestBook invitationId="minangkabau-demo" />
             </div>
           </section>
 
@@ -439,9 +439,13 @@ const MinangkabauDemo = () => {
             <div className="max-w-2xl mx-auto text-center">
               <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
                 <h2 className="font-serif text-3xl text-red-800 mb-8">Bagikan Undangan</h2>
-                <ShareButtons groomName={weddingData.groomName} brideName={weddingData.brideName} />
+                <ShareButtons 
+                  url={window.location.href}
+                  coupleName={`${weddingData.groomName} & ${weddingData.brideName}`}
+                  weddingDate={weddingData.date}
+                />
                 <div className="mt-8">
-                  <QRCodeGenerator size={150} />
+                  <QRCodeGenerator url={window.location.href} size={150} />
                 </div>
               </motion.div>
             </div>
