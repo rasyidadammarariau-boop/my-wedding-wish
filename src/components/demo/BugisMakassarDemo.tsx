@@ -14,6 +14,8 @@ import GuestBook from "@/components/invitation/GuestBook";
 import MusicPlayer from "@/components/invitation/MusicPlayer";
 import LoveStoryTimeline from "@/components/invitation/LoveStoryTimeline";
 import LightboxGallery from "@/components/invitation/LightboxGallery";
+import VenueMap from "@/components/invitation/VenueMap";
+import ParallaxSection, { FloatingElement } from "@/components/invitation/ParallaxSection";
 import { useLightbox } from "@/hooks/useLightbox";
 
 const BugisMakassarDemo = () => {
@@ -350,19 +352,29 @@ const BugisMakassarDemo = () => {
                 </motion.div>
               </div>
 
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mt-8 bg-white p-8 rounded-2xl shadow-lg border-2 border-red-200">
-                <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-700 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  <MapPin className="h-8 w-8 text-yellow-300" />
-                </div>
-                <h3 className="text-xl font-semibold text-red-800 mb-2">{weddingData.venue}</h3>
-                <p className="text-red-600 mb-4">{weddingData.address}</p>
-                <Button onClick={() => window.open(weddingData.mapsUrl, "_blank")} className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800">
-                  <MapPin className="h-4 w-4 mr-2" />
-                  Buka Google Maps
-                </Button>
-              </motion.div>
             </div>
           </section>
+
+          {/* Venue Map with Parallax */}
+          <ParallaxSection className="py-20 px-4 bg-gradient-to-b from-red-50 to-white" fadeIn>
+            <div className="max-w-4xl mx-auto relative">
+              {/* Floating Decorative Elements */}
+              <FloatingElement className="absolute -top-10 -left-10 hidden md:block" intensity={0.8}>
+                <LontaraOrnament className="w-16 h-8 text-red-500/30" />
+              </FloatingElement>
+              <FloatingElement className="absolute -top-5 -right-10 hidden md:block" intensity={1.2} delay={0.3}>
+                <LontaraOrnament className="w-12 h-6 text-red-500/30 scale-x-[-1]" />
+              </FloatingElement>
+              
+              <VenueMap
+                venueName={weddingData.venue}
+                address={weddingData.address}
+                latitude={-5.1477}
+                longitude={119.4327}
+                googleMapsUrl={weddingData.mapsUrl}
+              />
+            </div>
+          </ParallaxSection>
 
           {/* Gallery */}
           <section className="py-20 px-4 bg-gradient-to-b from-red-50 to-white">
